@@ -489,6 +489,312 @@
                 ]
             }
         },
+        "/api/add-banner": {
+            "post": {
+                "tags": [
+                    "Banner"
+                ],
+                "summary": "Add banner",
+                "operationId": "bannerstore",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "title"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "content": {
+                                        "type": "text"
+                                    },
+                                    "link": {
+                                        "type": "text"
+                                    },
+                                    "status": {
+                                        "type": "boolean"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "not acceptable",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_security": []
+                    }
+                ]
+            }
+        },
+        "/api/view-banner/{id}": {
+            "get": {
+                "tags": [
+                    "Banner"
+                ],
+                "summary": "banner",
+                "operationId": "bannershow",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Banner Id",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "not acceptable",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_security": []
+                    }
+                ]
+            }
+        },
+        "/api/edit-banner/{id}": {
+            "post": {
+                "tags": [
+                    "Banner"
+                ],
+                "summary": "Edit Banner",
+                "operationId": "bannerupdate",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Banner Id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "content": {
+                                        "type": "text"
+                                    },
+                                    "link": {
+                                        "type": "text"
+                                    },
+                                    "status": {
+                                        "type": "boolean"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "not acceptable",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_security": []
+                    }
+                ]
+            }
+        },
+        "/api/edit-banner-status/{id}": {
+            "post": {
+                "tags": [
+                    "Banner"
+                ],
+                "summary": "Edit Banner Status",
+                "operationId": "bannerUpdateStatus",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Banner Id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "not acceptable",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_security": []
+                    }
+                ]
+            }
+        },
+        "/api/delete-banner/{id}": {
+            "delete": {
+                "tags": [
+                    "Banner"
+                ],
+                "summary": "Delete Banner",
+                "operationId": "bannerDestroy",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Banner Id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "not acceptable",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_security": []
+                    }
+                ]
+            }
+        },
         "/api/add-product": {
             "post": {
                 "tags": [

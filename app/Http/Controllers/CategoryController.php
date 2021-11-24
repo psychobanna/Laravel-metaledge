@@ -305,6 +305,9 @@ class CategoryController extends Controller
         }
 
         $requestData = $request->all();
+        if($request->hasFile('image')){
+            $requestData['image'] = 'category/'.$imageName;
+        }
         $data = Category::where('id',$request->id)->update($requestData);
 
         if ($data) {

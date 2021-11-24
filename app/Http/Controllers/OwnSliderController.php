@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
+use App\Models\ownSlider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class ProductController extends Controller
+class OwnSliderController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,11 +23,9 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-
     public function create()
     {
         //
-
     }
 
     /**
@@ -38,12 +36,13 @@ class ProductController extends Controller
      */
 
 
+
     /**
      * @OA\Post(
-     *      path="/api/add-product",
-     *      summary="Add Product",
-     *      tags={"Product"},
-     *      operationId="productStore",
+     *      path="/api/add-banner",
+     *      summary="Add banner",
+     *      tags={"Banner"},
+     *      operationId="bannerstore",
      *   security={{"bearer_security":{}}},
      * @OA\Response(response=200,description="successful operation", @OA\JsonContent()),
      * @OA\Response(response=406,description="not acceptable", @OA\JsonContent()),
@@ -53,21 +52,17 @@ class ProductController extends Controller
      *         @OA\MediaType(
      *             mediaType="multipart/form-data",
      *             @OA\Schema(
-     *                  required={"name","price"},
+     *                  required={"title"},
      *                  @OA\Property(
-     *                      property="name",
+     *                      property="title",
      *                      type="string"
      *                  ),
      *                  @OA\Property(
-     *                      property="price",
-     *                      type="string"
+     *                      property="content",
+     *                      type="text"
      *                  ),
      *                  @OA\Property(
-     *                      property="discount_price",
-     *                      type="string"
-     *                  ),
-     *                  @OA\Property(
-     *                      property="description",
+     *                      property="link",
      *                      type="text"
      *                  ),
      *                  @OA\Property(
@@ -85,12 +80,12 @@ class ProductController extends Controller
      *)
      *
      */
-    public function productStore(Request $request)
+    public function bannerstore(Request $request)
     {
         //
+
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'price' => 'required',
+            'title' => 'required',
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
 
@@ -103,27 +98,26 @@ class ProductController extends Controller
             ], 422);
         }
 
-        if (Product::where('name',$request->name)->count() != 0) {
+        if (ownSlider::where('title',$request->title)->count() != 0) {
             return response()->json([
                 'response_code' => 422,
                 'message' => 'The given data was invalid.',
-                'errors' => "Product name already exist",
+                'errors' => "Title already exist",
                 'data' => (object)[]
             ], 422);
         }
 
         if ($request->hasFile('image')) {
             $imageName = time().'.'.$request->image->extension();
-            $request->image->move(public_path("product"), $imageName);
+            $request->image->move(public_path("banner"), $imageName);
         }
 
         if($imageName != ""){
-            $data = Product::create([
-                'name' => $request->name,
-                'price' => $request->price,
-                'discount_price' => $request->discount_price,
-                'description' => $request->description,
-                'image' => "product/".$imageName,
+            $data = ownSlider::create([
+                'title' => $request->title,
+                'link' => $request->link,
+                'content' => $request->content,
+                'image' => "banner/".$imageName,
                 'status' => $request->status == "true"?1:0,
             ]);
         }
@@ -131,15 +125,15 @@ class ProductController extends Controller
         if ($data) {
             return response()->json([
                 'response_code' => 200,
-                'message' => 'Product Added',
+                'message' => 'Banner Added',
                 'errors' => (Object)[],
                 'data' => $data
             ], 200);
         }else{
             return response()->json([
                 'response_code' => 200,
-                'message' => 'Product not Added',
-                'errors' => "Product not added",
+                'message' => 'Banner not Added',
+                'errors' => "Banner not added",
                 'data' => (Object)[]
             ], 200);
         }
@@ -149,19 +143,19 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Product  $product
+     * @param  \App\Models\ownSlider  $ownSlider
      * @return \Illuminate\Http\Response
      */
 
     /**
      * @OA\Get(
-     *      path="/api/view-product/{id}",
-     *      summary="View product",
-     *      tags={"Product"},
-     *      operationId="productShow",
+     *      path="/api/view-banner/{id}",
+     *      summary="banner",
+     *      tags={"Banner"},
+     *      operationId="bannershow",
      *      security={{"bearer_security":{}}},
      *      @OA\Parameter(
-     *         description="Product Id",
+     *         description="Banner Id",
      *         in="path",
      *         name="id",
      *         @OA\Schema(
@@ -174,67 +168,30 @@ class ProductController extends Controller
      *      @OA\Response(response=500,description="internal server error", @OA\JsonContent()),
      *)
      */
-    public function productShow($id="",Product $product)
+    public function bannershow($id="",ownSlider $ownSlider)
     {
         //
-        if($id=="," || $id==""){
-            $product = Product::all();
+        if($id=="" || $id=="," || $id=="{id}"){
+            $sliders = $ownSlider->all();
         }else{
-            $product = Product::where('id',$id)->first();
+            $sliders = $ownSlider->where('id',$id)->first();
         }
+
         return response()->json([
             'response_code' => 201,
-            'message' => 'Products',
+            'message' => 'Bnners',
             'errors' => (Object)[],
-            'data' => $product
-        ], 200);
-    }
-
-
-    /**
-     * @OA\Get(
-     *      path="/api/view-active-product/{id}",
-     *      summary="View active product",
-     *      tags={"Product"},
-     *      operationId="productActiveShow",
-     *      security={{"bearer_security":{}}},
-     *      @OA\Parameter(
-     *         description="Product Id",
-     *         in="path",
-     *         name="id",
-     *         @OA\Schema(
-     *             type="integer",
-     *             format="int64"
-     *         )
-     *      ),
-     *      @OA\Response(response=201,description="successful operation", @OA\JsonContent()),
-     *      @OA\Response(response=406,description="not acceptable", @OA\JsonContent()),
-     *      @OA\Response(response=500,description="internal server error", @OA\JsonContent()),
-     *)
-     */
-    public function productActiveShow($id="",Product $product)
-    {
-        //
-        if($id=="," || $id==""){
-            $product = Product::where('status',1)->get();
-        }else{
-            $product = Product::where('status',1)->where('id',$id)->first();
-        }
-        return response()->json([
-            'response_code' => 201,
-            'message' => 'Products',
-            'errors' => (Object)[],
-            'data' => $product
+            'data' => $sliders
         ], 200);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Product  $product
+     * @param  \App\Models\ownSlider  $ownSlider
      * @return \Illuminate\Http\Response
      */
-    public function edit(Product $product)
+    public function edit(ownSlider $ownSlider)
     {
         //
     }
@@ -243,23 +200,23 @@ class ProductController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Product  $product
+     * @param  \App\Models\ownSlider  $ownSlider
      * @return \Illuminate\Http\Response
      */
 
-
     /**
      * @OA\Post(
-     *      path="/api/edit-product/{id}",
-     *      summary="Edit Product",
-     *      tags={"Product"},
-     *      operationId="productUpdate",
-     *   security={{"bearer_security":{}}},
+     *      path="/api/edit-banner/{id}",
+     *      summary="Edit Banner",
+     *      tags={"Banner"},
+     *      operationId="bannerupdate",
+     *      security={{"bearer_security":{}}},
      * @OA\Response(response=200,description="successful operation", @OA\JsonContent()),
      * @OA\Response(response=406,description="not acceptable", @OA\JsonContent()),
      * @OA\Response(response=500,description="internal server error", @OA\JsonContent()),
+     *
      *     @OA\Parameter(
-     *         description="Product Id",
+     *         description="Banner Id",
      *         in="path",
      *         name="id",
      *         required=true,
@@ -268,33 +225,21 @@ class ProductController extends Controller
      *             format="int64"
      *         )
      *     ),
-     *     @OA\RequestBody(
+     *      @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
      *             mediaType="multipart/form-data",
      *             @OA\Schema(
      *                  @OA\Property(
-     *                      property="name",
+     *                      property="title",
      *                      type="string"
      *                  ),
      *                  @OA\Property(
-     *                      property="price",
-     *                      type="string"
-     *                  ),
-     *                  @OA\Property(
-     *                      property="discount_price",
-     *                      type="string"
-     *                  ),
-     *                  @OA\Property(
-     *                      property="description",
+     *                      property="content",
      *                      type="text"
      *                  ),
      *                  @OA\Property(
-     *                      property="category",
-     *                      type="text"
-     *                  ),
-     *                  @OA\Property(
-     *                      property="subcategory",
+     *                      property="link",
      *                      type="text"
      *                  ),
      *                  @OA\Property(
@@ -312,55 +257,74 @@ class ProductController extends Controller
      *)
      *
      */
-    public function productUpdate($id="",Request $request, Product $product)
+    public function bannerupdate($id,Request $request, ownSlider $ownSlider)
     {
         //
-        if (Product::where('name',$request->name)->where('id','<>',$id)->count() != 0) {
+
+        //
+        $validator = Validator::make($request->all(), [
+            // 'name' => 'required'
+        ]);
+
+        if ($validator->fails()) {
             return response()->json([
                 'response_code' => 422,
                 'message' => 'The given data was invalid.',
-                'errors' => "Product name already exist",
+                'errors' => $validator->errors(),
+                'data' => (Object)[]
+            ], 422);
+        }
+
+        if (ownSlider::where('title',$request->title)->where('id','<>',$id)->count() != 0) {
+            return response()->json([
+                'response_code' => 422,
+                'message' => 'The given data was invalid.',
+                'errors' => "Banner Title already exist",
                 'data' => (object)[]
             ], 422);
         }
 
         if ($request->hasFile('image')) {
             $imageName = time().'.'.$request->image->extension();
-            $request->image->move(public_path("product"), $imageName);
+            $request->image->move(public_path("banner"), $imageName);
         }
 
         $requestData = array_filter($request->all());
-        $data = Product::where('id',$request->id)->update($requestData);
+        if($request->hasFile('image')){
+            $requestData['image'] = 'banner/'.$imageName;
+        }
+        $data = ownSlider::where('id',$request->id)->update($requestData);
 
         if ($data) {
             return response()->json([
                 'response_code' => 200,
-                'message' => 'Product Updated',
+                'message' => 'Banner Updated',
                 'errors' => (Object)[],
-                'data' => $requestData
+                'data' => ownSlider::where("id",$id)->first()
             ], 200);
         }else{
             return response()->json([
                 'response_code' => 200,
-                'message' => 'Product not Updated',
-                'errors' => "Product not Updated",
+                'message' => 'Banner not Updated',
+                'errors' => "Banner not Updated",
                 'data' => (Object)[]
             ], 200);
         }
     }
 
+
     /**
      * @OA\Post(
-     *      path="/api/edit-product-status/{id}",
-     *      summary="Edit Product Status",
-     *      tags={"Product"},
-     *      operationId="updateProductStatus",
+     *      path="/api/edit-banner-status/{id}",
+     *      summary="Edit Banner Status",
+     *      tags={"Banner"},
+     *      operationId="bannerUpdateStatus",
      *      security={{"bearer_security":{}}},
      * @OA\Response(response=200,description="successful operation", @OA\JsonContent()),
      * @OA\Response(response=406,description="not acceptable", @OA\JsonContent()),
      * @OA\Response(response=500,description="internal server error", @OA\JsonContent()),
      *     @OA\Parameter(
-     *         description="Product Id",
+     *         description="Banner Id",
      *         in="path",
      *         name="id",
      *         required=true,
@@ -372,55 +336,58 @@ class ProductController extends Controller
      *)
      *
      */
-    public function updateProductStatus($id,Product $category)
+    public function bannerUpdateStatus($id,ownSlider $ownSlider)
     {
         //
-        $product = Product::where('id',$id)->first();
-        if($product->status == 1){
+
+        $ownSlider = ownSlider::where('id',$id)->first();
+
+        if($ownSlider->status == 1){
             $status = 0;
         }else{
             $status = 1;
         }
-        $data = Product::where('id',$id)->update([
+        $data = ownSlider::where('id',$id)->update([
             'status' => $status
         ]);
 
         if ($data) {
             return response()->json([
                 'response_code' => 200,
-                'message' => 'Product Status Updated',
+                'message' => 'Banner Status Updated',
                 'errors' => (Object)[],
-                'data' => Product::where("id",$id)->first()
+                'data' => ownSlider::where("id",$id)->first()
             ], 200);
         }else{
             return response()->json([
                 'response_code' => 200,
-                'message' => 'Product Stauts not Updated',
-                'errors' => "Product Stauts not Updated",
+                'message' => 'Banner Stauts not Updated',
+                'errors' => "Banner Stauts not Updated",
                 'data' => (Object)[]
             ], 200);
         }
+
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Product  $product
+     * @param  \App\Models\ownSlider  $ownSlider
      * @return \Illuminate\Http\Response
      */
 
      /**
      * @OA\Delete(
-     *      path="/api/delete-product/{id}",
-     *      summary="Delete Product",
-     *      tags={"Product"},
-     *      operationId="productDestroy",
+     *      path="/api/delete-banner/{id}",
+     *      summary="Delete Banner",
+     *      tags={"Banner"},
+     *      operationId="bannerDestroy",
      *      security={{"bearer_security":{}}},
      * @OA\Response(response=200,description="successful operation", @OA\JsonContent()),
      * @OA\Response(response=406,description="not acceptable", @OA\JsonContent()),
      * @OA\Response(response=500,description="internal server error", @OA\JsonContent()),
      *     @OA\Parameter(
-     *         description="Product Id",
+     *         description="Banner Id",
      *         in="path",
      *         name="id",
      *         required=true,
@@ -432,23 +399,23 @@ class ProductController extends Controller
      *)
      *
      */
-    public function productDestroy($id,Product $product)
+    public function bannerDestroy($id="",ownSlider $ownSlider)
     {
         //
-        $data = Product::where("id",$id)->delete();
+        $data = ownSlider::where("id",$id)->delete();
 
         if ($data) {
             return response()->json([
                 'response_code' => 200,
-                'message' => 'Product Deleted',
+                'message' => 'Banner Deleted',
                 'errors' => (Object)[],
-                'data' => Product::where("id",$id)->first()
+                'data' => ownSlider::where("id",$id)->first()
             ], 200);
         }else{
             return response()->json([
                 'response_code' => 200,
-                'message' => 'Product not Deleted',
-                'errors' => "Product not Deleted",
+                'message' => 'Banner not Deleted',
+                'errors' => "Banner not Deleted",
                 'data' => (Object)[]
             ], 200);
         }
