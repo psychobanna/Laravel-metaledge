@@ -12,7 +12,9 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\OwnSliderController;
+use App\Http\Controllers\PagesController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\WebsiteController;
 use App\Models\ownSlider;
@@ -41,11 +43,21 @@ Route::post('/confirm-password', [ConfirmablePasswordController::class, 'store']
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->middleware('auth')->name('logout');
 
 Route::get('/website', [WebsiteController::class, 'websiteshow'])->middleware('guest');
+Route::get('view-active-banner',[OwnSliderController::class, 'bannerActiveShow']);
 Route::get('view-active-product',[ProductController::class, 'productActiveShow']);
 Route::get('view-active-product/{id}',[ProductController::class, 'productActiveShow']);
 
+Route::post('customer-register',[CustomerController::class, 'userRegister']);
+Route::post('customer-login',[CustomerController::class, 'userLogin']);
+
+
+
+
 Route::middleware(['auth:sanctum'])->name('api.')->group(function () {
     // Admin
+    Route::post('/change-password', [NewPasswordController::class, 'changepassword']);
+    Route::get('/profile', [AuthenticatedSessionController::class, 'viewProfile']);
+    Route::post('/profile', [AuthenticatedSessionController::class, 'profile']);
 
     // Category
     Route::post('add-category',[CategoryController::class, 'store']);
@@ -55,6 +67,14 @@ Route::middleware(['auth:sanctum'])->name('api.')->group(function () {
     Route::post('edit-category/{id}',[CategoryController::class, 'update']);
     Route::post('edit-category-status/{id}',[CategoryController::class, 'updateStatus']);
     Route::delete('delete-category/{id}',[CategoryController::class, 'destroy']);
+
+    // Page
+    Route::post('add-page',[PagesController::class, 'storePages']);
+    Route::get('view-page',[PagesController::class, 'showPages']);
+    Route::get('view-page/{id}',[PagesController::class, 'showPages']);
+    Route::post('edit-page/{id}',[PagesController::class, 'editPage']);
+    Route::post('edit-page-status/{id}',[PagesController::class, 'updatePageStatus']);
+    Route::delete('delete-page/{id}',[PagesController::class, 'destroyPage']);
 
     // Product
     Route::post('add-product',[ProductController::class, 'productStore']);

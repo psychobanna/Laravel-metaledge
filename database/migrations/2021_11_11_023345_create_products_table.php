@@ -19,6 +19,9 @@ class CreateProductsTable extends Migration
             $table->string("name");
             $table->string("price");
             $table->string("discount_price")->nullable();
+            $table->string("latest")->nullable();
+            $table->string("best")->nullable();
+            $table->string("related")->nullable();
             $table->text("description")->nullable();
             $table->integer("category")->nullable();
             $table->integer("subcategory")->nullable();

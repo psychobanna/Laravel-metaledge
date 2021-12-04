@@ -186,6 +186,44 @@ class OwnSliderController extends Controller
     }
 
     /**
+     * @OA\Get(
+     *      path="/api/view-active-banner/{id}",
+     *      summary="banner",
+     *      tags={"Banner"},
+     *      operationId="bannerActiveShow",
+     *      security={{"bearer_security":{}}},
+     *      @OA\Parameter(
+     *         description="Banner Id",
+     *         in="path",
+     *         name="id",
+     *         @OA\Schema(
+     *             type="integer",
+     *             format="int64"
+     *         )
+     *      ),
+     *      @OA\Response(response=201,description="successful operation", @OA\JsonContent()),
+     *      @OA\Response(response=406,description="not acceptable", @OA\JsonContent()),
+     *      @OA\Response(response=500,description="internal server error", @OA\JsonContent()),
+     *)
+     */
+    public function bannerActiveShow($id="",ownSlider $ownSlider)
+    {
+        //
+        if($id=="" || $id=="," || $id=="{id}"){
+            $sliders = $ownSlider->where('status',1)->get();
+        }else{
+            $sliders = $ownSlider->where('status',1)->where('id',$id)->first();
+        }
+
+        return response()->json([
+            'response_code' => 201,
+            'message' => 'Bnners',
+            'errors' => (Object)[],
+            'data' => $sliders
+        ], 200);
+    }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\ownSlider  $ownSlider

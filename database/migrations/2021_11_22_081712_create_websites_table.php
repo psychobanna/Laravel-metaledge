@@ -31,7 +31,8 @@ class CreateWebsitesTable extends Migration
             'store_name' => 'The Metal Edge',
             'store_tagline' => 'The Metal Edge',
             'contact' => '9636200102',
-            'email' => 'sumersingh1997.ssh@gmail.com'
+            'email' => 'sumersingh1997.ssh@gmail.com',
+            'currency' => 'USD'
         ]);
     }
 

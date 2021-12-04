@@ -63,6 +63,163 @@
                 }
             }
         },
+        "/api/profile": {
+            "get": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Profile",
+                "operationId": "viewProfile",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "not acceptable",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_security": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Profile",
+                "operationId": "profile",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "number"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "not acceptable",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_security": []
+                    }
+                ]
+            }
+        },
+        "/api/change-password": {
+            "post": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Change Passowrd",
+                "operationId": "changepassword",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "oldpassword": {
+                                        "type": "string"
+                                    },
+                                    "newpassword": {
+                                        "type": "string"
+                                    },
+                                    "newpassword_confirmation": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "not acceptable",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_security": []
+                    }
+                ]
+            }
+        },
         "/api/forgot-password": {
             "post": {
                 "tags": [
@@ -489,6 +646,124 @@
                 ]
             }
         },
+        "/api/customer-register": {
+            "post": {
+                "tags": [
+                    "Customer"
+                ],
+                "summary": "Customer Registration",
+                "operationId": "userRegister",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "username": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "text"
+                                    },
+                                    "email": {
+                                        "type": "text"
+                                    },
+                                    "contact": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "not acceptable",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/customer-login": {
+            "post": {
+                "tags": [
+                    "Customer"
+                ],
+                "summary": "Customer Login",
+                "operationId": "userLogin",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "username": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "not acceptable",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/add-banner": {
             "post": {
                 "tags": [
@@ -567,6 +842,57 @@
                 ],
                 "summary": "banner",
                 "operationId": "bannershow",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Banner Id",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "not acceptable",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_security": []
+                    }
+                ]
+            }
+        },
+        "/api/view-active-banner/{id}": {
+            "get": {
+                "tags": [
+                    "Banner"
+                ],
+                "summary": "banner",
+                "operationId": "bannerActiveShow",
                 "parameters": [
                     {
                         "name": "id",
@@ -795,6 +1121,257 @@
                 ]
             }
         },
+        "/api/add-page": {
+            "post": {
+                "tags": [
+                    "Page"
+                ],
+                "summary": "Add Page",
+                "operationId": "storePages",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "title"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "text"
+                                    },
+                                    "menu": {
+                                        "type": "string"
+                                    },
+                                    "status": {
+                                        "type": "boolean"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "not acceptable",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_security": []
+                    }
+                ]
+            }
+        },
+        "/api/view-page/{id}/": {
+            "get": {
+                "tags": [
+                    "Page"
+                ],
+                "summary": "View Page",
+                "operationId": "showPages",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Category Id",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "not acceptable",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_security": []
+                    }
+                ]
+            }
+        },
+        "/api/edit-page/{id}": {
+            "post": {
+                "tags": [
+                    "Page"
+                ],
+                "summary": "Edit Page",
+                "operationId": "editPage",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Page Id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "text"
+                                    },
+                                    "status": {
+                                        "type": "boolean"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "not acceptable",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_security": []
+                    }
+                ]
+            }
+        },
+        "/api/edit-page-status/{id}": {
+            "post": {
+                "tags": [
+                    "Page"
+                ],
+                "summary": "Edit Page Status",
+                "operationId": "updatePageStatus",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Page Id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "not acceptable",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_security": []
+                    }
+                ]
+            }
+        },
         "/api/add-product": {
             "post": {
                 "tags": [
@@ -877,6 +1454,57 @@
                 ],
                 "summary": "View product",
                 "operationId": "productShow",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Product Id",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "not acceptable",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_security": []
+                    }
+                ]
+            }
+        },
+        "/api/view-active-product/{id}": {
+            "get": {
+                "tags": [
+                    "Product"
+                ],
+                "summary": "View active product",
+                "operationId": "productActiveShow",
                 "parameters": [
                     {
                         "name": "id",
