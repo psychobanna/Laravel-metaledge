@@ -459,6 +459,57 @@
                 ]
             }
         },
+        "/api/view-active-category/{parent_id}": {
+            "get": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "View Active Category",
+                "operationId": "showActiveCategory",
+                "parameters": [
+                    {
+                        "name": "parent_id",
+                        "in": "path",
+                        "description": "Parent Id",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "not acceptable",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_security": []
+                    }
+                ]
+            }
+        },
         "/api/edit-category/{id}": {
             "post": {
                 "tags": [
@@ -1372,6 +1423,58 @@
                 ]
             }
         },
+        "/api/delete-page/{id}": {
+            "post": {
+                "tags": [
+                    "Page"
+                ],
+                "summary": "Delete Page Status",
+                "operationId": "destroyPage",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Page Id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "not acceptable",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_security": []
+                    }
+                ]
+            }
+        },
         "/api/add-product": {
             "post": {
                 "tags": [
@@ -1390,6 +1493,9 @@
                                 ],
                                 "properties": {
                                     "name": {
+                                        "type": "string"
+                                    },
+                                    "tag": {
                                         "type": "string"
                                     },
                                     "price": {
@@ -1575,6 +1681,9 @@
                             "schema": {
                                 "properties": {
                                     "name": {
+                                        "type": "string"
+                                    },
+                                    "tag": {
                                         "type": "string"
                                     },
                                     "price": {

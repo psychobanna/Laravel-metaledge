@@ -59,6 +59,10 @@ class ProductController extends Controller
      *                      type="string"
      *                  ),
      *                  @OA\Property(
+     *                      property="tag",
+     *                      type="string"
+     *                  ),
+     *                  @OA\Property(
      *                      property="price",
      *                      type="string"
      *                  ),
@@ -275,6 +279,10 @@ class ProductController extends Controller
      *             @OA\Schema(
      *                  @OA\Property(
      *                      property="name",
+     *                      type="string"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="tag",
      *                      type="string"
      *                  ),
      *                  @OA\Property(

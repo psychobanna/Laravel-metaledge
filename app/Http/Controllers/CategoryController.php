@@ -201,6 +201,51 @@ class CategoryController extends Controller
 
     }
 
+
+
+    /**
+     * @OA\Get(
+     *      path="/api/view-active-category",
+     *      summary="View Active Category",
+     *      tags={"Category"},
+     *      operationId="showActiveCategory",
+     *      security={{"bearer_security":{}}},
+     *      @OA\Parameter(
+     *         description="Parent Id",
+     *         in="path",
+     *         name="parent_id",
+     *         @OA\Schema(
+     *             type="integer",
+     *             format="int64"
+     *         )
+     *      ),
+     *      @OA\Response(response=201,description="successful operation", @OA\JsonContent()),
+     *      @OA\Response(response=406,description="not acceptable", @OA\JsonContent()),
+     *      @OA\Response(response=500,description="internal server error", @OA\JsonContent()),
+     *)
+     */
+    public function showActiveCategory($parent_id="",Category $category)
+    {
+        //
+        if($parent_id == ""){
+            return response()->json([
+                'response_code' => 404,
+                'message' => 'Error Category not found!',
+                'errors' => (Object)[],
+                'data' => (Object)[]
+            ], 404);
+        }else{
+            $category = Category::where("parent_id",$parent_id)->where("status",1)->get();
+        }
+        return response()->json([
+            'response_code' => 201,
+            'message' => 'Categories',
+            'errors' => (Object)[],
+            'data' => $category
+        ], 200);
+
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

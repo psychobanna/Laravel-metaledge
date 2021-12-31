@@ -358,8 +358,52 @@ class PagesController extends Controller
      * @param  \App\Models\Pages  $pages
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Pages $pages)
+
+    /**
+     * @OA\Post(
+     *      path="/api/delete-page/{id}",
+     *      summary="Delete Page Status",
+     *      tags={"Page"},
+     *      operationId="destroyPage",
+     *      security={{"bearer_security":{}}},
+     * @OA\Response(response=200,description="successful operation", @OA\JsonContent()),
+     * @OA\Response(response=406,description="not acceptable", @OA\JsonContent()),
+     * @OA\Response(response=500,description="internal server error", @OA\JsonContent()),
+     *     @OA\Parameter(
+     *         description="Page Id",
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer",
+     *             format="int64"
+     *         )
+     *     )
+     *)
+     *
+    **/
+    public function destroyPage($id="",Pages $pages)
     {
         //
+        $page = Pages::where('id',$id)->first();
+
+        $data = Pages::where('id',$id)->delete();
+
+        if($data){
+            return response()->json([
+                'response_code' => 200,
+                'message' => 'Page Status Updated',
+                'errors' => (Object)[],
+                'data' => Pages::where("id",$id)->first()
+            ], 200);
+        }else{
+            return response()->json([
+                'response_code' => 200,
+                'message' => 'Page Stauts not Updated',
+                'errors' => "Page Stauts not Updated",
+                'data' => (Object)[]
+            ], 200);
+        }
+
     }
 }

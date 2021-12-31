@@ -46,6 +46,8 @@ Route::get('/website', [WebsiteController::class, 'websiteshow'])->middleware('g
 Route::get('view-active-banner',[OwnSliderController::class, 'bannerActiveShow']);
 Route::get('view-active-product',[ProductController::class, 'productActiveShow']);
 Route::get('view-active-product/{id}',[ProductController::class, 'productActiveShow']);
+Route::get('view-active-category',[CategoryController::class, 'showActiveCategory']);
+Route::get('view-active-category/{parent_id}',[CategoryController::class, 'showActiveCategory']);
 
 Route::post('customer-register',[CustomerController::class, 'userRegister']);
 Route::post('customer-login',[CustomerController::class, 'userLogin']);
