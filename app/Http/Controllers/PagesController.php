@@ -185,6 +185,43 @@ class PagesController extends Controller
     }
 
     /**
+     * @OA\Get(
+     *      path="/api/view-active-page/{id}/",
+     *      summary="View Active Page",
+     *      tags={"Page"},
+     *      operationId="showActivePages",
+     *      security={{"bearer_security":{}}},
+     *      @OA\Parameter(
+     *         description="Category Id",
+     *         in="path",
+     *         name="id",
+     *         @OA\Schema(
+     *             type="integer",
+     *             format="int64"
+     *         )
+     *      ),
+     *      @OA\Response(response=201,description="successful operation", @OA\JsonContent()),
+     *      @OA\Response(response=406,description="not acceptable", @OA\JsonContent()),
+     *      @OA\Response(response=500,description="internal server error", @OA\JsonContent()),
+     *)
+     */
+    public function showActivePages($id="",Pages $pages)
+    {
+        //
+        if($id=="," || $id==""){
+            $page = Pages::where("status",1)->get();
+        }else{
+            $page = Pages::where("status",1)->where('id',$id)->first();
+        }
+        return response()->json([
+            'response_code' => 201,
+            'message' => 'Pages',
+            'errors' => (Object)[],
+            'data' => $page
+        ], 200);
+    }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Pages  $pages
@@ -360,7 +397,7 @@ class PagesController extends Controller
      */
 
     /**
-     * @OA\Post(
+     * @OA\Delete(
      *      path="/api/delete-page/{id}",
      *      summary="Delete Page Status",
      *      tags={"Page"},
@@ -385,24 +422,33 @@ class PagesController extends Controller
     public function destroyPage($id="",Pages $pages)
     {
         //
-        $page = Pages::where('id',$id)->first();
+        $count = Pages::where('id',$id)->count();
 
-        $data = Pages::where('id',$id)->delete();
 
-        if($data){
+        if($count != 1){
             return response()->json([
-                'response_code' => 200,
-                'message' => 'Page Status Updated',
+                'response_code' => 404,
+                'message' => 'Page not found',
                 'errors' => (Object)[],
-                'data' => Pages::where("id",$id)->first()
-            ], 200);
-        }else{
-            return response()->json([
-                'response_code' => 200,
-                'message' => 'Page Stauts not Updated',
-                'errors' => "Page Stauts not Updated",
                 'data' => (Object)[]
-            ], 200);
+            ], 404);
+        }else{
+            $data = Pages::where('id',$id)->delete();
+            if($data){
+                return response()->json([
+                    'response_code' => 200,
+                    'message' => 'Page deleted',
+                    'errors' => (Object)[],
+                    'data' => (Object)[]
+                ], 200);
+            }else{
+                return response()->json([
+                    'response_code' => 500,
+                    'message' => 'Page not deleted',
+                    'errors' => (Object)[],
+                    'data' => (Object)[]
+                ], 500);
+            }
         }
 
     }

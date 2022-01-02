@@ -5,18 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ownSlider extends Model
+class Blog extends Model
 {
     use HasFactory;
 
 
+
     protected $fillable = [
-        "type",
-        "title",
-        "content",
-        "link",
-        "image",
-        "status",
+        'title',
+        'content',
+        'image',
+        'status'
     ];
 
     public function getImageAttribute($val)
@@ -24,5 +23,4 @@ class ownSlider extends Model
         // return Storage::url("app/public/".$val);
         return asset($val);
     }
-
 }

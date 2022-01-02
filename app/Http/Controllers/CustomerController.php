@@ -152,6 +152,51 @@ class CustomerController extends Controller
     }
 
 
+    /**
+     * @OA\Post(
+     *      path="/api/customer-subscribe",
+     *      summary="Customer Subscribe",
+     *      tags={"Customer"},
+     *      operationId="userSubscribe",
+     * @OA\Response(response=200,description="successful operation", @OA\JsonContent()),
+     * @OA\Response(response=406,description="not acceptable", @OA\JsonContent()),
+     * @OA\Response(response=500,description="internal server error", @OA\JsonContent()),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                  @OA\Property(
+     *                      property="email",
+     *                      type="string"
+     *                  )
+     *             )
+     *         )
+     *     )
+     *)
+     *
+     */
+    public function userSubscribe(Request $request){
 
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|unique:customers'
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'response_code' => 422,
+                'message' => 'The given data was invalid.',
+                'errors' => $validator->errors(),
+                'data' => (object)[]
+            ], 422);
+        }
+        $requestData = $request->all();
+        customer::create($requestData);
+        return response()->json([
+            'response_code' => 200,
+            'message' => 'Thank you for subscribe.',
+            'errors' => (object)[],
+            'data' => (object)[]
+        ], 200);
 
+    }
 }

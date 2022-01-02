@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOwnSlidersTable extends Migration
+class CreateReviewsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,13 @@ class CreateOwnSlidersTable extends Migration
      */
     public function up()
     {
-        Schema::create('own_sliders', function (Blueprint $table) {
+        Schema::create('reviews', function (Blueprint $table) {
             $table->id();
-            $table->string("type");
-            $table->string("image");
-            $table->string("title");
-            $table->string("content")->nullable();
-            $table->string("link")->nullable();
-            $table->integer("status")->default(0);
+            $table->string("product_id");
+            $table->string("rating");
+            $table->string("name");
+            $table->string("email");
+            $table->text("comment");
             $table->timestamps();
         });
     }
@@ -32,6 +31,6 @@ class CreateOwnSlidersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('own_sliders');
+        Schema::dropIfExists('reviews');
     }
 }

@@ -209,11 +209,19 @@ class CategoryController extends Controller
      *      summary="View Active Category",
      *      tags={"Category"},
      *      operationId="showActiveCategory",
-     *      security={{"bearer_security":{}}},
      *      @OA\Parameter(
      *         description="Parent Id",
      *         in="path",
      *         name="parent_id",
+     *         @OA\Schema(
+     *             type="integer",
+     *             format="int64"
+     *         )
+     *      ),
+     *      @OA\Parameter(
+     *         description="Category Id",
+     *         in="path",
+     *         name="id",
      *         @OA\Schema(
      *             type="integer",
      *             format="int64"
@@ -224,18 +232,21 @@ class CategoryController extends Controller
      *      @OA\Response(response=500,description="internal server error", @OA\JsonContent()),
      *)
      */
-    public function showActiveCategory($parent_id="",Category $category)
+    public function showActiveCategory($id="",$parent_id="",Category $category)
     {
         //
-        if($parent_id == ""){
-            return response()->json([
-                'response_code' => 404,
-                'message' => 'Error Category not found!',
-                'errors' => (Object)[],
-                'data' => (Object)[]
-            ], 404);
+        if($id=="," || $id==""){
+            if($parent_id == "" || $parent_id == ","){
+                $category = Category::all();
+            }else{
+                $category = Category::where("parent_id",$parent_id)->get();
+            }
         }else{
-            $category = Category::where("parent_id",$parent_id)->where("status",1)->get();
+            if($parent_id == ""){
+                $category = Category::where('id',$id)->first();
+            }else{
+                $category = Category::where("parent_id",$parent_id)->get();
+            }
         }
         return response()->json([
             'response_code' => 201,

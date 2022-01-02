@@ -62,6 +62,10 @@ class OwnSliderController extends Controller
      *                      type="text"
      *                  ),
      *                  @OA\Property(
+     *                      property="type",
+     *                      type="text"
+     *                  ),
+     *                  @OA\Property(
      *                      property="link",
      *                      type="text"
      *                  ),
@@ -114,6 +118,7 @@ class OwnSliderController extends Controller
 
         if($imageName != ""){
             $data = ownSlider::create([
+                'type' => $request->type,
                 'title' => $request->title,
                 'link' => $request->link,
                 'content' => $request->content,
@@ -274,6 +279,10 @@ class OwnSliderController extends Controller
      *                  ),
      *                  @OA\Property(
      *                      property="content",
+     *                      type="text"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="type",
      *                      type="text"
      *                  ),
      *                  @OA\Property(

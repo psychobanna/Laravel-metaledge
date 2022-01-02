@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
+use App\Models\Blog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class ProductController extends Controller
+class BlogController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,11 +23,9 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-
     public function create()
     {
         //
-
     }
 
     /**
@@ -38,12 +36,13 @@ class ProductController extends Controller
      */
 
 
+
     /**
      * @OA\Post(
-     *      path="/api/add-product",
-     *      summary="Add Product",
-     *      tags={"Product"},
-     *      operationId="productStore",
+     *      path="/api/add-blog",
+     *      summary="Add Blog",
+     *      tags={"Blog"},
+     *      operationId="storeBlog",
      *   security={{"bearer_security":{}}},
      * @OA\Response(response=200,description="successful operation", @OA\JsonContent()),
      * @OA\Response(response=406,description="not acceptable", @OA\JsonContent()),
@@ -53,25 +52,13 @@ class ProductController extends Controller
      *         @OA\MediaType(
      *             mediaType="multipart/form-data",
      *             @OA\Schema(
-     *                  required={"name","price"},
+     *                  required={"title"},
      *                  @OA\Property(
-     *                      property="name",
+     *                      property="title",
      *                      type="string"
      *                  ),
      *                  @OA\Property(
-     *                      property="tag",
-     *                      type="string"
-     *                  ),
-     *                  @OA\Property(
-     *                      property="price",
-     *                      type="string"
-     *                  ),
-     *                  @OA\Property(
-     *                      property="discount_price",
-     *                      type="string"
-     *                  ),
-     *                  @OA\Property(
-     *                      property="description",
+     *                      property="content",
      *                      type="text"
      *                  ),
      *                  @OA\Property(
@@ -89,12 +76,11 @@ class ProductController extends Controller
      *)
      *
      */
-    public function productStore(Request $request)
+    public function storeBlog(Request $request)
     {
         //
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'price' => 'required',
+            'title' => 'required',
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
 
@@ -107,27 +93,25 @@ class ProductController extends Controller
             ], 422);
         }
 
-        if (Product::where('name',$request->name)->count() != 0) {
+        if (Blog::where('title',$request->title)->count() != 0) {
             return response()->json([
                 'response_code' => 422,
                 'message' => 'The given data was invalid.',
-                'errors' => "Product name already exist",
+                'errors' => "Blog Title already exist",
                 'data' => (object)[]
             ], 422);
         }
 
         if ($request->hasFile('image')) {
             $imageName = time().'.'.$request->image->extension();
-            $request->image->move(public_path("product"), $imageName);
+            $request->image->move(public_path("blog"), $imageName);
         }
 
         if($imageName != ""){
-            $data = Product::create([
-                'name' => $request->name,
-                'price' => $request->price,
-                'discount_price' => $request->discount_price,
-                'description' => $request->description,
-                'image' => "product/".$imageName,
+            $data = Blog::create([
+                'title' => $request->title,
+                'content' => $request->content,
+                'image' => "blog/".$imageName,
                 'status' => $request->status == "true"?1:0,
             ]);
         }
@@ -135,37 +119,39 @@ class ProductController extends Controller
         if ($data) {
             return response()->json([
                 'response_code' => 200,
-                'message' => 'Product Added',
+                'message' => 'Blog Added',
                 'errors' => (Object)[],
                 'data' => $data
             ], 200);
         }else{
             return response()->json([
                 'response_code' => 200,
-                'message' => 'Product not Added',
-                'errors' => "Product not added",
+                'message' => 'Blog not Added',
+                'errors' => "Blog not added",
                 'data' => (Object)[]
             ], 200);
         }
+
 
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Product  $product
+     * @param  \App\Models\Blog  $blog
      * @return \Illuminate\Http\Response
      */
 
+
     /**
      * @OA\Get(
-     *      path="/api/view-product/{id}",
-     *      summary="View product",
-     *      tags={"Product"},
-     *      operationId="productShow",
+     *      path="/api/view-blog/{id}",
+     *      summary="View Blog",
+     *      tags={"Blog"},
+     *      operationId="showBlog",
      *      security={{"bearer_security":{}}},
      *      @OA\Parameter(
-     *         description="Product Id",
+     *         description="Blog Id",
      *         in="path",
      *         name="id",
      *         @OA\Schema(
@@ -178,32 +164,34 @@ class ProductController extends Controller
      *      @OA\Response(response=500,description="internal server error", @OA\JsonContent()),
      *)
      */
-    public function productShow($id="",Product $product)
+    public function showBlog($id = "",Blog $blog)
     {
         //
-        if($id=="," || $id==""){
-            $product = Product::all();
+        if($id=="," || $id=="" || $id=="{id}"){
+            $blog = Blog::all();
         }else{
-            $product = Product::where('id',$id)->first();
+            $blog = Blog::where('id',$id)->first();
         }
         return response()->json([
             'response_code' => 201,
-            'message' => 'Products',
+            'message' => 'Blog',
             'errors' => (Object)[],
-            'data' => $product
+            'data' => $blog
         ], 200);
+
     }
+
 
 
     /**
      * @OA\Get(
-     *      path="/api/view-active-product/{id}",
-     *      summary="View active product",
-     *      tags={"Product"},
-     *      operationId="productActiveShow",
+     *      path="/api/view-active-blog/{id}",
+     *      summary="View Active Blog",
+     *      tags={"Blog"},
+     *      operationId="showActiveBlog",
      *      security={{"bearer_security":{}}},
      *      @OA\Parameter(
-     *         description="Product Id",
+     *         description="Blog Id",
      *         in="path",
      *         name="id",
      *         @OA\Schema(
@@ -216,94 +204,44 @@ class ProductController extends Controller
      *      @OA\Response(response=500,description="internal server error", @OA\JsonContent()),
      *)
      */
-    public function productActiveShow($id="",Product $product)
+    public function showActiveBlog($id = "",Blog $blog)
     {
         //
-        if($id=="," || $id==""){
-            $product = Product::where('status',1)->get();
+        if($id=="," || $id=="" || $id=="{id}"){
+            $blog = Blog::where("status",1)->get();
         }else{
-            $product = Product::where('status',1)->where('id',$id)->first();
+            $blog = Blog::where("status",1)->where('id',$id)->first();
         }
         return response()->json([
             'response_code' => 201,
-            'message' => 'Products',
+            'message' => 'Blog',
             'errors' => (Object)[],
-            'data' => $product
+            'data' => $blog
         ], 200);
+
     }
 
-    /**
-     * @OA\Get(
-     *      path="/api/view-active-productbycategory/{id}",
-     *      summary="View active product by category",
-     *      tags={"Product"},
-     *      operationId="productActiveShowByCategory",
-     *      security={{"bearer_security":{}}},
-     *      @OA\Parameter(
-     *         description="Category Id",
-     *         in="path",
-     *         name="id",
-     *         @OA\Schema(
-     *             type="integer",
-     *             format="int64"
-     *         )
-     *      ),
-     *      @OA\Response(response=201,description="successful operation", @OA\JsonContent()),
-     *      @OA\Response(response=406,description="not acceptable", @OA\JsonContent()),
-     *      @OA\Response(response=500,description="internal server error", @OA\JsonContent()),
-     *)
-     */
-    public function productActiveShowByCategory($id=""){
-        if($id=="," || $id==""){
-            return response()->json([
-                'response_code' => 422,
-                'message' => "Category Id not available",
-                'errors' => "Category Id not available",
-                'data' => (Object)[]
-            ], 422);
-        }else{
-            $product = Product::where('status',1)->where("category",$id)->get();
-        }
-
-        return response()->json([
-            'response_code' => 201,
-            'message' => 'Products',
-            'errors' => (Object)[],
-            'data' => $product
-        ], 200);
-    }
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Product $product)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Product  $product
+     * @param  \App\Models\Blog  $blog
      * @return \Illuminate\Http\Response
      */
 
 
     /**
      * @OA\Post(
-     *      path="/api/edit-product/{id}",
-     *      summary="Edit Product",
-     *      tags={"Product"},
-     *      operationId="productUpdate",
-     *   security={{"bearer_security":{}}},
+     *      path="/api/edit-blog/{id}",
+     *      summary="Edit Blog",
+     *      tags={"Blog"},
+     *      operationId="editBlog",
+     *      security={{"bearer_security":{}}},
      * @OA\Response(response=200,description="successful operation", @OA\JsonContent()),
      * @OA\Response(response=406,description="not acceptable", @OA\JsonContent()),
      * @OA\Response(response=500,description="internal server error", @OA\JsonContent()),
+     *
      *     @OA\Parameter(
-     *         description="Product Id",
+     *         description="Blog Id",
      *         in="path",
      *         name="id",
      *         required=true,
@@ -312,37 +250,18 @@ class ProductController extends Controller
      *             format="int64"
      *         )
      *     ),
-     *     @OA\RequestBody(
+     *      @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
      *             mediaType="multipart/form-data",
      *             @OA\Schema(
+     *                  required={"title"},
      *                  @OA\Property(
-     *                      property="name",
+     *                      property="title",
      *                      type="string"
      *                  ),
      *                  @OA\Property(
-     *                      property="tag",
-     *                      type="string"
-     *                  ),
-     *                  @OA\Property(
-     *                      property="price",
-     *                      type="string"
-     *                  ),
-     *                  @OA\Property(
-     *                      property="discount_price",
-     *                      type="string"
-     *                  ),
-     *                  @OA\Property(
-     *                      property="description",
-     *                      type="text"
-     *                  ),
-     *                  @OA\Property(
-     *                      property="category",
-     *                      type="text"
-     *                  ),
-     *                  @OA\Property(
-     *                      property="subcategory",
+     *                      property="content",
      *                      type="text"
      *                  ),
      *                  @OA\Property(
@@ -360,61 +279,73 @@ class ProductController extends Controller
      *)
      *
      */
-    public function productUpdate($id="",Request $request, Product $product)
+    public function editBlog($id="",Request $request,Blog $blog)
     {
         //
-        if (Product::where('name',$request->name)->where('id','<>',$id)->count() != 0) {
+
+        $validator = Validator::make($request->all(), [
+            'title' => 'required'
+        ]);
+
+        if ($validator->fails()) {
             return response()->json([
                 'response_code' => 422,
                 'message' => 'The given data was invalid.',
-                'errors' => "Product name already exist",
+                'errors' => $validator->errors(),
+                'data' => (Object)[]
+            ], 422);
+        }
+
+        if (Blog::where('title',$request->title)->where('id','<>',$id)->count() != 0) {
+            return response()->json([
+                'response_code' => 422,
+                'message' => 'The given data was invalid.',
+                'errors' => "Blog Title already exist",
                 'data' => (object)[]
             ], 422);
         }
 
         if ($request->hasFile('image')) {
             $imageName = time().'.'.$request->image->extension();
-            $request->image->move(public_path("product"), $imageName);
+            $request->image->move(public_path("blog"), $imageName);
         }
 
-        $requestData = array_filter($request->all());
-
-        if ($request->hasFile('image')) {
-            $requestData['image'] = "product/".$imageName;
+        $requestData = $request->all();
+        if($request->hasFile('image')){
+            $requestData['image'] = 'blog/'.$imageName;
         }
-
-        $requestData['category'] = $request->category!=0?$request->category:0;
-        $data = Product::where('id',$request->id)->update($requestData);
+        $data = Blog::where('id',$request->id)->update($requestData);
 
         if ($data) {
             return response()->json([
                 'response_code' => 200,
-                'message' => 'Product Updated',
+                'message' => 'Blog Updated',
                 'errors' => (Object)[],
-                'data' => $requestData
+                'data' => Blog::where("id",$id)->first()
             ], 200);
         }else{
             return response()->json([
                 'response_code' => 200,
-                'message' => 'Product not Updated',
-                'errors' => "Product not Updated",
+                'message' => 'Blog not Updated',
+                'errors' => "Blog not Updated",
                 'data' => (Object)[]
             ], 200);
         }
+
     }
 
     /**
      * @OA\Post(
-     *      path="/api/edit-product-status/{id}",
-     *      summary="Edit Product Status",
-     *      tags={"Product"},
-     *      operationId="updateProductStatus",
+     *      path="/api/edit-blog-status/{id}",
+     *      summary="Edit Blog Status",
+     *      tags={"Blog"},
+     *      operationId="updateBlogStatus",
      *      security={{"bearer_security":{}}},
      * @OA\Response(response=200,description="successful operation", @OA\JsonContent()),
      * @OA\Response(response=406,description="not acceptable", @OA\JsonContent()),
      * @OA\Response(response=500,description="internal server error", @OA\JsonContent()),
      *     @OA\Parameter(
-     *         description="Product Id",
+     *         description="Blog Id",
      *         in="path",
      *         name="id",
      *         required=true,
@@ -426,55 +357,69 @@ class ProductController extends Controller
      *)
      *
      */
-    public function updateProductStatus($id,Product $category)
+    public function updateBlogStatus($id="",Blog $blog)
     {
         //
-        $product = Product::where('id',$id)->first();
-        if($product->status == 1){
+        $blog = Blog::where('id',$id)->first();
+
+        // return response()->json([$blog[0]->status]);
+        if($blog->status == 1){
             $status = 0;
         }else{
             $status = 1;
         }
-        $data = Product::where('id',$id)->update([
+        $data = Blog::where('id',$id)->update([
             'status' => $status
         ]);
 
         if ($data) {
             return response()->json([
                 'response_code' => 200,
-                'message' => 'Product Status Updated',
+                'message' => 'Blog Status Updated',
                 'errors' => (Object)[],
-                'data' => Product::where("id",$id)->first()
+                'data' => Blog::where("id",$id)->first()
             ], 200);
         }else{
             return response()->json([
                 'response_code' => 200,
-                'message' => 'Product Stauts not Updated',
-                'errors' => "Product Stauts not Updated",
+                'message' => 'Blog Stauts not Updated',
+                'errors' => "Blog Stauts not Updated",
                 'data' => (Object)[]
             ], 200);
         }
     }
 
     /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Blog  $blog
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, Blog $blog)
+    {
+        //
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Product  $product
+     * @param  \App\Models\Blog  $blog
      * @return \Illuminate\Http\Response
      */
 
      /**
      * @OA\Delete(
-     *      path="/api/delete-product/{id}",
-     *      summary="Delete Product",
-     *      tags={"Product"},
-     *      operationId="productDestroy",
+     *      path="/api/delete-blog/{id}",
+     *      summary="Delete Blog",
+     *      tags={"Blog"},
+     *      operationId="destroyBlog",
      *      security={{"bearer_security":{}}},
      * @OA\Response(response=200,description="successful operation", @OA\JsonContent()),
      * @OA\Response(response=406,description="not acceptable", @OA\JsonContent()),
      * @OA\Response(response=500,description="internal server error", @OA\JsonContent()),
      *     @OA\Parameter(
-     *         description="Product Id",
+     *         description="Blog Id",
      *         in="path",
      *         name="id",
      *         required=true,
@@ -486,23 +431,23 @@ class ProductController extends Controller
      *)
      *
      */
-    public function productDestroy($id,Product $product)
+    public function destroyBlog($id="",Blog $blog)
     {
         //
-        $data = Product::where("id",$id)->delete();
+        $data = Blog::where("id",$id)->delete();
 
         if ($data) {
             return response()->json([
                 'response_code' => 200,
-                'message' => 'Product Deleted',
+                'message' => 'Blog Deleted',
                 'errors' => (Object)[],
-                'data' => Product::where("id",$id)->first()
+                'data' => Blog::where("id",$id)->first()
             ], 200);
         }else{
             return response()->json([
                 'response_code' => 200,
-                'message' => 'Product not Deleted',
-                'errors' => "Product not Deleted",
+                'message' => 'Blog not Deleted',
+                'errors' => "Blog not Deleted",
                 'data' => (Object)[]
             ], 200);
         }
