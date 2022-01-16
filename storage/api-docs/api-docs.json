@@ -227,7 +227,7 @@
                 ],
                 "summary": "Forgot Password",
                 "description": "Forgot Password by email",
-                "operationId": "store",
+                "operationId": "storeNewPassword",
                 "requestBody": {
                     "description": "User Email",
                     "required": true,
@@ -682,6 +682,122 @@
                 ]
             }
         },
+        "/api/add-cart": {
+            "post": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Add Cart",
+                "operationId": "storeCart",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "customer",
+                                    "product",
+                                    "qty"
+                                ],
+                                "properties": {
+                                    "customer": {
+                                        "type": "number"
+                                    },
+                                    "product": {
+                                        "type": "number"
+                                    },
+                                    "qty": {
+                                        "type": "number"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "not acceptable",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/view-cart/{id}/{product_id}": {
+            "get": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "View Cart",
+                "operationId": "showCart",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Customer Id",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "product_id",
+                        "in": "path",
+                        "description": "Product Id",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "not acceptable",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/add-category": {
             "post": {
                 "tags": [
@@ -1133,61 +1249,11 @@
                         "multipart/form-data": {
                             "schema": {
                                 "properties": {
-                                    "username": {
+                                    "email": {
                                         "type": "string"
                                     },
                                     "password": {
                                         "type": "text"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "406": {
-                        "description": "not acceptable",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "internal server error",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/customer-subscribe": {
-            "post": {
-                "tags": [
-                    "Customer"
-                ],
-                "summary": "Customer Subscribe",
-                "operationId": "userSubscribe",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "properties": {
-                                    "email": {
-                                        "type": "string"
                                     }
                                 },
                                 "type": "object"
@@ -2452,6 +2518,91 @@
                 ],
                 "responses": {
                     "201": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "not acceptable",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/add-customer-subscribe": {
+            "post": {
+                "tags": [
+                    "Customer"
+                ],
+                "summary": "Add Customer Subscribe",
+                "operationId": "storeSubscribe",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "not acceptable",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/view-customer-subscribe": {
+            "get": {
+                "tags": [
+                    "Customer"
+                ],
+                "summary": "View Customer Subscribe",
+                "operationId": "Add Customer Subscribe",
+                "responses": {
+                    "200": {
                         "description": "successful operation",
                         "content": {
                             "application/json": {

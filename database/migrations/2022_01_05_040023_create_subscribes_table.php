@@ -4,31 +4,29 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCartsTable extends Migration
+class CreateSubscribesTable extends Migration
 {
-    /*
+    /**
      * Run the migrations.
      *
      * @return void
      */
     public function up()
     {
-        Schema::create('carts', function (Blueprint $table) {
+        Schema::create('subscribes', function (Blueprint $table) {
             $table->id();
-            $table->string("customer");
-            $table->string("product");
-            $table->string("qty");
+            $table->string("email");
             $table->timestamps();
         });
     }
 
-    /*
+    /**
      * Reverse the migrations.
      *
      * @return void
      */
     public function down()
     {
-        Schema::dropIfExists('carts');
+        Schema::dropIfExists('subscribes');
     }
 }

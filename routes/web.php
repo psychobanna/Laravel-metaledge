@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AngularController;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,17 +15,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::get('/email', function () {
+    return view('email');
+});
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
 // })->middleware(['auth'])->name('dashboard');
 
 Route::any('/{any}', [AngularController::class, 'index'])->where('any', '^(?!api).*$');
-
-
-
 
 require __DIR__.'/auth.php';

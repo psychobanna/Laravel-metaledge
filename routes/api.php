@@ -12,13 +12,16 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\OwnSliderController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewsController;
+use App\Http\Controllers\SubscribeController;
 use App\Http\Controllers\WebsiteController;
+use App\Models\Cart;
 use App\Models\ownSlider;
 
 /*
@@ -38,7 +41,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Admin
 Route::post('/login', [AuthenticatedSessionController::class, 'store'])->middleware('guest');
 Route::post('/register', [RegisteredUserController::class, 'registration'])->middleware('guest');
-Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->middleware('guest')->name('password.email');
+Route::post('/forgot-password', [PasswordResetLinkController::class, 'storeNewPassword'])->middleware('guest')->name('password.email');
 Route::post('/reset-password', [NewPasswordController::class, 'store'])->middleware('guest')->name('password.update');
 
 Route::post('/confirm-password', [ConfirmablePasswordController::class, 'store'])->middleware('auth');
@@ -61,10 +64,19 @@ Route::get('view-active-blog/{id}',[BlogController::class, 'showActiveBlog']);
 // Customer
 Route::post('customer-register',[CustomerController::class, 'userRegister']);
 Route::post('customer-login',[CustomerController::class, 'userLogin']);
-Route::post('customer-subscribe',[CustomerController::class, 'userSubscribe']);
+Route::post('add-customer-subscribe',[SubscribeController::class, 'storeSubscribe']);
+Route::get('view-customer-subscribe',[SubscribeController::class, 'showSubscribe']);
 
 Route::post('add-review',[ReviewsController::class, 'storeReview']);
 Route::get('view-review/{product_id}',[ReviewsController::class, 'showReview']);
+
+
+// Cart
+Route::post('add-cart',[CartController::class, 'storeCart']);
+Route::get('view-cart/{id}',[CartController::class, 'showCart']);
+Route::get('view-cart/{id}/{product_id}',[CartController::class, 'showCart']);
+
+
 
 Route::middleware(['auth:sanctum'])->name('api.')->group(function () {
     // Admin
@@ -112,7 +124,6 @@ Route::middleware(['auth:sanctum'])->name('api.')->group(function () {
     Route::post('edit-banner/{id}',[OwnSliderController::class, 'bannerupdate']);
     Route::post('edit-banner-status/{id}',[OwnSliderController::class, 'bannerUpdateStatus']);
     Route::delete('delete-banner/{id}',[OwnSliderController::class, 'bannerDestroy']);
-
 
 });
 
